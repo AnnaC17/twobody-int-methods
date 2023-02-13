@@ -52,7 +52,7 @@ def get_energy(X,x,V,v,G=1.0,M=1.0,m=3.0e-6):
     
     
     # Magnitudes of the position vector between body 1 & 2, and velocity vectors
-    r_mag = np.abs(np.linalg.norm(x-X))
+    r_mag = np.linalg.norm(x-X)
     V_mag = np.linalg.norm(V)
     v_mag = np.linalg.norm(v) 
     
