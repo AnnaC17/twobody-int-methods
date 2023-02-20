@@ -1,5 +1,5 @@
 import numpy as np
-# this is an update
+
 ##########
 
 def get_accel(X,x,G=1.0,M=1.0,m=3.0e-6):
@@ -18,8 +18,8 @@ def get_accel(X,x,G=1.0,M=1.0,m=3.0e-6):
             G; float:     gravitational constant (default = 1.0)
 
     RETURNS:
-            A; np.array:  acceleration of body 1
-            a; np.array:  acceleration of body 2
+            A; float:     acceleration of body 1
+            a; float:     acceleration of body 2
     '''
     
     # Acceleration due to gravity
@@ -86,11 +86,11 @@ def euler(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
             G; float:     gravitational constant (default = 1.0)
             
     RETURNS:
-            X_vec; array-like:  array of body 1's x position
-            Y_vec; array-like:  array of body 1's y position
-            x_vec; array-like:  array of body 2's x position
-            y_vec; array-like:  array of body 2's y position
-            E; array-like:      array of recorded energies
+            X_vec; list:  array of body 1's x position
+            Y_vec; list:  array of body 1's y position
+            x_vec; list:  array of body 2's x position
+            y_vec; list:  array of body 2's y position
+            E; list:      array of recorded energies
     '''
     x_vec, y_vec = [],[]
     X_vec, Y_vec = [],[]
@@ -144,7 +144,7 @@ def RK4(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
             Y_vec; list:  y position of body 1
             x_vec; list:  x position of body 2
             y_vec; list:  y position of body 2
-            E; array-like:      array of recorded energies
+            E; list:      array of recorded energies
     '''
     x_vec, y_vec = [],[]
     X_vec, Y_vec = [],[]
@@ -199,3 +199,62 @@ def RK4(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
         E.append(energy)
         
     return X_vec, Y_vec, x_vec, y_vec, E
+
+##########
+
+def leapfrog(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
+    '''
+    PURPOSE:
+            Calculates the orbits of the two bodies using the Leapfrog/Kick-Drift-Kick Method.
+            
+    PARAMETERS:
+            X; np.array:  position of body 1
+            x; np.array:  position of body 2
+            V; np.array:  velocity of body 1
+            v; np.array:  velocity of body 2
+            dt; int:      timestep
+            t_end; int:   number of timesteps
+            
+    OPTIONAL PARAMETERS:
+            M; float:     mass of body 1 (default = 1.0)
+            m; float:     mass of body 2 (default = 3.0e-6)
+            G; float:     gravitational constant (default = 1.0)
+            
+    RETURNS:
+            X_vec; list:  x position of body 1
+            Y_vec; list:  y position of body 1
+            x_vec; list:  x position of body 2
+            y_vec; list:  y position of body 2
+    '''
+    x_vec, y_vec = [],[]
+    X_vec, Y_vec = [],[]
+    E = []
+    
+    for i in np.arange(0,t_end,dt):
+        
+        # get the accelerations
+        a, A = get_accel(X,x)
+        
+        # half step kick
+        v2 = v + 0.5*a*dt
+        V2 = V + 0.5*A*dt
+        
+        # drift
+        x = x + v2*dt
+        X = X + V2*dt
+        
+        # accel part 2!
+        a2, A2 = get_accel(X,x)
+        
+        # new velocities
+        v = v2 + 0.5*a2*dt
+        V = V2 + 0.5*A2*dt
+        
+        # get energy
+        energy = get_energy(X,x,V,v)
+        
+        x_vec.append(x[0]), y_vec.append(x[1])
+        X_vec.append(X[0]), Y_vec.append(X[1])
+        E.append(energy)
+        
+    return x_vec, y_vec, X_vec, Y_vec, E
