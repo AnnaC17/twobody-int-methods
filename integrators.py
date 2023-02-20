@@ -86,11 +86,11 @@ def euler(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
             G; float:     gravitational constant (default = 1.0)
             
     RETURNS:
-            X_vec; list:  array of body 1's x position
-            Y_vec; list:  array of body 1's y position
-            x_vec; list:  array of body 2's x position
-            y_vec; list:  array of body 2's y position
-            E; list:      array of recorded energies
+            X_vec; list:  x position of body 1
+            Y_vec; list:  y position of body 1
+            x_vec; list:  x position of body 2
+            y_vec; list:  y position of body 2
+            E; list:      recorded energies
     '''
     x_vec, y_vec = [],[]
     X_vec, Y_vec = [],[]
@@ -144,7 +144,7 @@ def RK4(X,x,V,v,dt,t_end,M=1.0,m=3.0e-6,G=1.0):
             Y_vec; list:  y position of body 1
             x_vec; list:  x position of body 2
             y_vec; list:  y position of body 2
-            E; list:      array of recorded energies
+            E; list:      recorded energies
     '''
     x_vec, y_vec = [],[]
     X_vec, Y_vec = [],[]
